@@ -20,7 +20,7 @@ function Login({ onSignup, onLogin }) {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/auth/login",
+        "https://vaultiq-xpyl.onrender.com/api/auth/login",
         {
           method: "POST",
           headers: {
@@ -86,7 +86,7 @@ function Login({ onSignup, onLogin }) {
     setError("");
 
     window.location.href =
-      "http://127.0.0.1:8000/api/auth/google";
+      "https://vaultiq-xpyl.onrender.com/api/auth/google";
   };
 
 

@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.responses import RedirectResponse
+
 from authlib.integrations.starlette_client import OAuth
 from sqlalchemy.orm import Session
+
 import os
 import secrets
 
@@ -19,6 +21,7 @@ from app.core.security import (
 from app.models.user import User
 
 from app.schemas.auth import (
+    ChangePasswordRequest,
     LoginRequest,
     MessageResponse,
     RefreshRequest,
@@ -295,8 +298,7 @@ async def google_callback(
     response_model=MessageResponse,
 )
 def change_password(
-    current_password: str,
-    new_password: str,
+    data: ChangePasswordRequest,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -309,7 +311,7 @@ def change_password(
     # ------------------------------------------
 
     if not verify_password(
-        current_password,
+        data.current_password,
         current_user.password_hash,
     ):
         raise HTTPException(
@@ -321,7 +323,7 @@ def change_password(
     # Validate new password
     # ------------------------------------------
 
-    if len(new_password) < 8:
+    if len(data.new_password) < 8:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="New password must be at least 8 characters long.",
@@ -332,7 +334,7 @@ def change_password(
     # ------------------------------------------
 
     if verify_password(
-        new_password,
+        data.new_password,
         current_user.password_hash,
     ):
         raise HTTPException(
@@ -345,7 +347,7 @@ def change_password(
     # ------------------------------------------
 
     current_user.password_hash = hash_password(
-        new_password
+        data.new_password
     )
 
     db.commit()
@@ -409,7 +411,7 @@ def refresh_token(
 
     user = db.get(
         User,
-        user_uuid
+        user_uuid,
     )
 
     if not user or not user.is_active:

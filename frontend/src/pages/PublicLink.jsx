@@ -21,7 +21,7 @@ function PublicLink() {
       setMessage("");
 
       const response = await fetch(
-        `http://127.0.0.1:8000/api/link-shares/${token}/access`,
+        `https://vaultiq-xpyl.onrender.com/api/link-shares/${token}/access`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -54,7 +54,7 @@ function PublicLink() {
       setMessage("");
 
       const response = await fetch(
-        `http://127.0.0.1:8000/api/link-shares/${token}/download`
+        `https://vaultiq-xpyl.onrender.com/api/link-shares/${token}/download`
       );
 
       if (!response.ok) {
@@ -176,3 +176,4 @@ function PublicLink() {
 }
 
 export default PublicLink;
+
