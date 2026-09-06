@@ -261,8 +261,7 @@ async def google_callback(
         # Redirect to React
         # ------------------------------------------
 
-        frontend_url = "http://localhost:5173"
-
+        frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
         redirect_url = (
             f"{frontend_url}/oauth/callback"
             f"?access_token={access_token}"
